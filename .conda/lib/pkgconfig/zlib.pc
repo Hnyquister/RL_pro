@@ -1,0 +1,13 @@
+prefix=/home/y/Data_home/RL_pro/RL_pro/.conda
+exec_prefix=/home/y/Data_home/RL_pro/RL_pro/.conda
+libdir=/home/y/Data_home/RL_pro/RL_pro/.conda/lib
+sharedlibdir=/home/y/Data_home/RL_pro/RL_pro/.conda/lib
+includedir=/home/y/Data_home/RL_pro/RL_pro/.conda/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.2.13
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}

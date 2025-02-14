@@ -1,0 +1,11 @@
+prefix=/home/y/Data_home/RL_pro/RL_pro/.conda
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+toolexeclibdir=${libdir}
+includedir=/home/y/Data_home/RL_pro/RL_pro/.conda/include
+
+Name: libffi
+Description: Library supporting Foreign Function Interfaces
+Version: 3.4.4
+Libs: -L${toolexeclibdir} -lffi
+Cflags: -I${includedir}
