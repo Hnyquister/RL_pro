@@ -1,4 +1,3 @@
-#testa
 import random
 import gym
 import numpy as np
@@ -55,14 +54,14 @@ class DQN:
         self.count = 0  # 计数器,记录更新次数
         self.device = device
 
-    def take_action(self, state):  # epsilon-贪婪策略采取动作
-        if np.random.random() < self.epsilon:
-            action = np.random.randint(self.action_dim)
-        else:
-            state = np.array(state, dtype=np.float32)  # 确保 state 是 numpy 数组
-            state = torch.tensor(state).unsqueeze(0).to(self.device)  # 添加批次维度
-            action = self.q_net(state).argmax().item()
-        return action
+def take_action(self, state):  # epsilon-贪婪策略采取动作
+    if np.random.random() < self.epsilon:
+        action = np.random.randint(self.action_dim)
+    else:
+        state = np.array(state, dtype=np.float32).flatten()  # 展平 state
+        state = torch.tensor(state).unsqueeze(0).to(self.device)  # 添加批次维度
+        action = self.q_net(state).argmax().item()
+    return action
 
     def update(self, transition_dict):
         states = torch.tensor(transition_dict['states'],
@@ -104,11 +103,11 @@ batch_size = 64
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device(
     "cpu")
 
-env_name = 'CartPole-v0'
+env_name = 'CartPole-v1'
 env = gym.make(env_name)
 random.seed(0)
 np.random.seed(0)
-env.action_space.seed(0)  # 修改这里
+env.seed(0)
 torch.manual_seed(0)
 replay_buffer = ReplayBuffer(buffer_size)
 state_dim = env.observation_space.shape[0]
@@ -163,21 +162,3 @@ plt.xlabel('Episodes')
 plt.ylabel('Returns')
 plt.title('DQN on {}'.format(env_name))
 plt.show()
-
-class ConvolutionalQnet(torch.nn.Module):
-    ''' 加入卷积层的Q网络 '''
-    def __init__(self, action_dim, in_channels=4):
-        super(ConvolutionalQnet, self).__init__()
-        self.conv1 = torch.nn.Conv2d(in_channels, 32, kernel_size=8, stride=4)
-        self.conv2 = torch.nn.Conv2d(32, 64, kernel_size=4, stride=2)
-        self.conv3 = torch.nn.Conv2d(64, 64, kernel_size=3, stride=1)
-        self.fc4 = torch.nn.Linear(7 * 7 * 64, 512)
-        self.head = torch.nn.Linear(512, action_dim)
-
-    def forward(self, x):
-        x = x / 255
-        x = F.relu(self.conv1(x))
-        x = F.relu(self.conv2(x))
-        x = F.relu(self.conv3(x))
-        x = F.relu(self.fc4(x))
-        return self.head(x)
